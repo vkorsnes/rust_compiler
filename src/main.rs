@@ -15,10 +15,27 @@ fn read_file(target: &str) -> String {
 	content
 }
 
-fn main() {
+fn parse_command_line_arguments() -> Result<Vec<String>, ()> {
 	let args: Vec<String> = env::args().collect();
-	let filename = &args[1];
+	if args.len() < 2 {
+		Err(())
+	}
+	else {
+		Ok(args)
+	}
+}
 
+fn main() {
+
+	let args = match parse_command_line_arguments() {
+		Ok(arg) => arg,
+		Err(()) => {
+			println!("Usage: simple_compiler FILENAME FLAG");
+			return
+		}
+	};
+
+	let filename = &args[1];
 	let content = read_file(filename);
 
 	println!("{}",content);
